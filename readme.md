@@ -4,6 +4,8 @@ Tool for helping in the exploitation of path traversal vulnerabilities in Java w
 
 ## Install
 
+Python3 is required for this tool.
+
 Run the following command:
 ```
 pip install -r requirements.txt
@@ -14,6 +16,8 @@ After installation provide an exploit URL like so:
 ```
 usage: python WebXMLExp.py <url_with_web_xml_exploit_or_inject_here_marker>
 ```
+
+The results (files that were downloaded) are available in the **results** folder.
 
 ### Examples
 
