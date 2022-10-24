@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+    vulnerable_web:
+      image: tomcat:10.0
+      volumes:
+        - ./vulnerable.war:/usr/local/tomcat/webapps/vulnerable.war
+      ports:
+        - '8082:8080'
