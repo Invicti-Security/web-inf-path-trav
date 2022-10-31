@@ -8,11 +8,12 @@
 # 8888P   Y8888 Y8b.     888 d88P d88P Y88b  888   "   888 888      888        .d8""8b. 888 d88P 
 # 888P     Y888  "Y8888  88888P" d88P   Y88b 888       888 88888888 8888888888 888  888 88888P"  
 #                                                                                       888      
-# 	Copyright (c) 2022 Bogdan Calin (Invicti Security)                                                                                      888    
-#
+#                                                                                       888
+# 	Copyright (c) 2022 Bogdan Calin (Invicti Security)
+# 
 
 import requests, sys, string, random, hashlib, os, pathlib, urllib.parse
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 proxies = {
    # 'http': 'http://127.0.0.1:8080',
@@ -21,8 +22,8 @@ proxies = {
 
 PAYLOAD_MARK = "<INJECT-HERE>"
 
-def md5(input):
-	return hashlib.md5(input.encode()).hexdigest()
+def sha256(input):
+ 	return hashlib.sha256(input.encode()).hexdigest()
 
 def randomStr(count):
 	return ''.join(random.choices(string.ascii_lowercase, k=count))
@@ -33,7 +34,7 @@ def getCustom404(orig_url):
 		url = orig_url.replace(PAYLOAD_MARK, payload)
 		resp = requests.get(url, proxies=proxies)
 		body = resp.text.replace(payload, "*").replace(urllib.parse.quote(payload), '*')
-		return (resp.status_code, md5(body))
+		return (resp.status_code, sha256(body))
 	except BaseException as e:
 		print("unable to determine custom404. maybe the URL is not valid? " +  str(e))
 		return False
@@ -42,7 +43,7 @@ def testPayload(orig_url, payload, custom404):
 	url = orig_url.replace(PAYLOAD_MARK, payload)
 	resp = requests.get(url, proxies=proxies)
 	body = resp.text.replace(payload, "*").replace(urllib.parse.quote(payload), '*')
-	if resp.status_code != custom404[0] or resp.status_code == custom404[0] and md5(body) != custom404[1]:
+	if resp.status_code != custom404[0] or resp.status_code == custom404[0] and sha256(body) != custom404[1]:
 		return resp
 	else:
 		return False
@@ -134,6 +135,12 @@ def saveResponse(response, payload):
 		payload = payload[1:]
 
 	path = os.path.join(os.getcwd(), "results", payload).replace("\\","/")
+
+	safe_dir = os.getcwd()
+	if os.path.commonprefix((os.path.realpath(path),safe_dir)) != safe_dir: 
+		print(f"Not writing results for invalid path \"{path}\" (hack not the hacker)")
+		return	
+
 	print(" saving response to {}".format(path))
 
 	p = pathlib.Path(path)
