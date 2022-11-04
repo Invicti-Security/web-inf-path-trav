@@ -2,7 +2,7 @@
 
 Tool for helping in the exploitation of path traversal vulnerabilities in Java web applications.
 
-This tool is referenced in the Invicti Security white paper [Exploiting path traversal vulnerabilities in Java web applications](https://www.invicti.com/white-papers/exploiting-path-traversal-vulnerabilities-java-web-applications-technical-paper/)
+This tool is referenced in the Invicti Security white paper [Exploiting path traversal vulnerabilities in Java web applications](https://www.invicti.com/white-papers/exploiting-path-traversal-vulnerabilities-java-web-applications-technical-paper/).
 
 ## Install
 
